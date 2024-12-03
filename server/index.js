@@ -32,7 +32,7 @@ const server = app.listen(5000, () => {
 
 const io = socket(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://chat990.netlify.app/",
     credentials: true,
   },
 });
