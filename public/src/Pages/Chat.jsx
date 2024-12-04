@@ -3,10 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import Contacts from "../Components/Contacts";
-import { allUsersRoute, host } from "../utils/APIRoutes";
 import Welcome from "../Components/Welcome";
 import ChatContainer from "../Components/ChatContainer";
 import { io } from "socket.io-client";
+import { allUsersRoute, host } from "../utils/APIRoutes";
 
 function Chat() {
   const socket = useRef();
@@ -15,6 +15,8 @@ function Chat() {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [currentChat, setCurrentChat] = useState(undefined);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  // Check for logged-in user
   useEffect(() => {
     const loadUser = async () => {
       if (!localStorage.getItem("chat-app-user")) {
@@ -28,6 +30,7 @@ function Chat() {
     loadUser();
   }, [navigate]);
 
+  // Initialize WebSocket
   useEffect(() => {
     if (currentUser) {
       socket.current = io(host);
@@ -35,6 +38,7 @@ function Chat() {
     }
   }, [currentUser]);
 
+  // Fetch Contacts
   useEffect(() => {
     const fetchContacts = async () => {
       if (currentUser) {
@@ -55,9 +59,11 @@ function Chat() {
     fetchContacts();
   }, [currentUser, navigate]);
 
+  // Handle Chat Change
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
   };
+
   return (
     <Container>
       <div className="container">
@@ -66,7 +72,7 @@ function Chat() {
           currentUser={currentUser}
           changeChat={handleChatChange}
         />
-        {isLoaded && currentChat === "undefined" ? (
+        {isLoaded && currentChat === undefined ? (
           <Welcome currentUser={currentUser} />
         ) : (
           <ChatContainer

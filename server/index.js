@@ -16,8 +16,7 @@ app.use("/api/messages", messageRoute);
 
 mongoose
   .connect(Url, {
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true,
+    
   })
   .then(() => {
     console.log("DB connection successful");
@@ -40,16 +39,12 @@ const io = socket(server, {
   },
 });
 global.onlineUsers = new Map();
-io.on("connection", (socket) => {
-  global.chatSocket = socket;
-  socket.on("add-user", (userId) => {
-    onlineUsers.set(userId, socket.id);
-  })
-
-  socket.on("send-msg", (data) => {
-    const sendUserSocket = onlineUsers.get(data.io);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("mag-recieved", data.messsage);
-    }
-  })
-})
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg); // Broadcast to all users
+  });
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
+});
