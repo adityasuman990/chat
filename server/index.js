@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes");
 const messageRoute = require("./routes/messages");
 const Url = "mongodb+srv://hunkyjunkymoose:aZdFnJaizGM8Hqmq@cluster0.wbl2z.mongodb.net/chat-app?retryWrites=true&w=majority&appName=Cluster0"
+
 const app = express();
 const socket = require("socket.io");
 require("dotenv").config();
